@@ -10,7 +10,7 @@ my $users = fns::decode("stackato users --json");
 print "EPOCH\tappinstance\tuser\turi\tquota\tused\n";
 
 foreach my $userhash (@$users) {
-	my $epoch = time;
+	my $epoch = fns::time_msecs;
 	my $useremail = $userhash->{'email'};
 	my $admin_role = $userhash->{'admin'};
 	my $appsarray = $userhash->{'apps'};

@@ -24,6 +24,11 @@ sub decode {
         return decode_json ($json);
 }
 
+sub time_msecs {
+        my $epoch = time; $epoch = $epoch."000"; # msecs adjustment required for java code to handle datetime
+	return $epoch;
+}
+
 sub chklogin {
         my $current_user;
         open (STAU,"stackato user|") or die "Unable to run \"stackato user\" command";

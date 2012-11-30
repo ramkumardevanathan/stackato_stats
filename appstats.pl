@@ -7,14 +7,16 @@ use fns;
 
 my $appstats = fns::decode("./getstats.sh $ARGV[0]");
 
-print "instance\tstate\tcores\tdisk_quota\tfds_quota\tmem_quota\tuptime\tcpu_usage\tdisk_usage\tmem_usage\turis\n";
+print "EPOCH\tinstance\tstate\tcores\tdisk_quota\tfds_quota\tmem_quota\tuptime\tcpu_usage\tdisk_usage\tmem_usage\turis\n";
 
 foreach my $apphash (@$appstats) {
+        my $epoch = fns::time_msecs;
 	my $sref = $apphash->{"stats"};
 	my $uref = $sref->{"usage"};
 	my $instance = $sref->{"name"}.
 			"-". $apphash->{"instance"}; # get env-0
-	print $instance."\t".
+	print $epoch."\t".
+		$instance."\t".
 		$apphash->{'state'}."\t".
 		$sref->{"cores"}."\t".
 		$sref->{"disk_quota"}."\t".
