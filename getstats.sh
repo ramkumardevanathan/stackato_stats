@@ -6,7 +6,7 @@
 
 
 # stackato@stackato-z5xy:~$ stackato stats "env" --json
-# env				<<< --- NEED TO REMOVE THIS LINE FROM OUTPUT
+# env				<<< --- NEED TO REMOVE THIS (FIRST) LINE FROM OUTPUT
 # [{
 #     "instance" : "0",
 #     "state"    : "RUNNING",
@@ -40,5 +40,5 @@ if [ -z $1 ]; then
 	exit
 fi
 
-stackato stats $1 --json | tail -21
+stackato stats $1 --json |grep -vE "^$1$"
 exit 0

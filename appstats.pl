@@ -9,8 +9,20 @@ my $appstats = fns::decode("./getstats.sh $ARGV[0]");
 
 print "instance\tstate\tcores\tdisk_quota\tfds_quota\tmem_quota\tuptime\turi\tcpu_usage\tdisk_usage\tmem_usage\n";
 
-foreach my $stat_hash (@$appstats) {
-	my $instance = $ARGV[0]."-". $stat_hash->{"instance"};
-	print $instance.": ".$stat_hash->{'state'};
-	
+foreach my $apphash (@$appstats) {
+	my $sref = $apphash->{"stats"};
+	my $uref = $sref->{"usage"};
+	my $instance = $sref->{"name"}.
+			"-". $apphash->{"instance"}; # get env-0
+	print $instance."\t".
+		$apphash->{'state'}."\t".
+		$sref->{"cores"}."\t".
+		$sref->{"disk_quota"}."\t".
+		$sref->{"fds_quota"}."\t".
+		$sref->{"mem_quota"}."\t".
+		$sref->{"uptime"}."\t".
+		$sref->{"uris"}."\t".
+		$uref->{"cpu"}."\t".
+		$uref->{"disk"}."\t".
+		$uref->{"mem"}."\n";
 }
