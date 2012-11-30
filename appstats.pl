@@ -7,7 +7,7 @@ use fns;
 
 my $appstats = fns::decode("./getstats.sh $ARGV[0]");
 
-print "instance\tstate\tcores\tdisk_quota\tfds_quota\tmem_quota\tuptime\turi\tcpu_usage\tdisk_usage\tmem_usage\n";
+print "instance\tstate\tcores\tdisk_quota\tfds_quota\tmem_quota\tuptime\tcpu_usage\tdisk_usage\tmem_usage\turis\n";
 
 foreach my $apphash (@$appstats) {
 	my $sref = $apphash->{"stats"};
@@ -21,8 +21,8 @@ foreach my $apphash (@$appstats) {
 		$sref->{"fds_quota"}."\t".
 		$sref->{"mem_quota"}."\t".
 		$sref->{"uptime"}."\t".
-		$sref->{"uris"}."\t".
 		$uref->{"cpu"}."\t".
 		$uref->{"disk"}."\t".
-		$uref->{"mem"}."\n";
+		$uref->{"mem"}."\t".
+		join(",",@{$sref->{"uris"}})."\n";
 }
