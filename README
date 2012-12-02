@@ -4,11 +4,9 @@
 
 This repository contains scripts to do the following:
 	i.	obtain data from collectd csv files
-	ii.	obtain data from ActiveState Stackato via stackato
-		command line.
-	iii.	write above data into BUS files (BUS Format),
-		a format that is required for presenting
-		in (HP) vPV tree-maps.
+	ii.	obtain data from ActiveState Stackato via stackato command line.
+	iii.	write above data into BUS files (BUS Format), a format that is required
+		for presenting in (HP) vPV tree-maps.
 
                      DEPENDENCIES
                      ------------
