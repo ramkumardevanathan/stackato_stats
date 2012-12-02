@@ -1,30 +1,39 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
 use JSON;
 use Data::Dumper;
 
 use fns;
 
-my $appstats = fns::decode("./getstats.sh $ARGV[0]");
+my $users = fns::decode("stackato users --json");
 
-print "EPOCH\tinstance\tstate\tcores\tdisk_quota\tfds_quota\tmem_quota\tuptime\tcpu_usage\tdisk_usage\tmem_usage\turis\n";
+foreach my $userhash (@$users) {
+	my $epoch = fns::time_msecs;
+	my $useremail = $userhash->{'email'};
+	my $appsarray = $userhash->{'apps'};
 
-foreach my $apphash (@$appstats) {
-        my $epoch = fns::time_msecs;
-	my $sref = $apphash->{"stats"};
-	my $uref = $sref->{"usage"};
-	my $instance = $sref->{"name"}.
-			"-". $apphash->{"instance"}; # get env-0
-	print $epoch."\t".
-		$instance."\t".
-		$apphash->{'state'}."\t".
-		$sref->{"cores"}."\t".
-		$sref->{"disk_quota"}."\t".
-		$sref->{"fds_quota"}."\t".
-		$sref->{"mem_quota"}."\t".
-		$sref->{"uptime"}."\t".
-		$uref->{"cpu"}."\t".
-		$uref->{"disk"}."\t".
-		$uref->{"mem"}."\t".
-		join(",",@{$sref->{"uris"}})."\n";
+	foreach my $apphash (@$appsarray) {
+		my $app = $apphash->{"name"};
+		fns::login ($useremail);
+		open (ASPL, "perl appstats.pl $app|") or die ("unable to run appstats.pl: $!");
+
+		my $firstline="";
+		while (<ASPL>) {
+		  my $line = $_;
+		  if ($firstline eq "") {
+		    $firstline = $_;
+		    next;
+		  }
+		  my @parts = split (/\t/, $line);
+		  my $busfilename = 
+			"APP_INSTANCE\$!".$useremail.".".$parts[1].".bus";
+		  open (BUS,">".$busfilename)
+			or die ("Unable to open file for writing");
+		  print (BUS $firstline);
+		  print (BUS $line);
+		  close (BUS);
+		}
+
+		close (ASPL);
+	}
 }
