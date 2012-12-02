@@ -5,7 +5,7 @@ use Data::Dumper;
 
 use fns;
 
-my $appstats = fns::decode("./getstats.sh $ARGV[0]");
+my $appstats = fns::decode("./jsonfix.sh $ARGV[0]");
 
 print "EPOCH\tinstance\tstate\tcores\tdisk_quota\tfds_quota\tmem_quota\tuptime\tcpu_usage\tdisk_usage\tmem_usage\turis\n";
 
