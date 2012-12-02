@@ -23,8 +23,7 @@ The scripts rely on the following settings and perl modules:
                        TESTING
                        -------
 
-The scripts have been tested to work with ActiveState Stackato
-micro-cloud version 2.4.3.
+The scripts have been tested to work with ActiveState Stackato micro-cloud version 2.4.3.
 
                        RUNNING
                        -------
