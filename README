@@ -1,0 +1,31 @@
+                        README
+                        ------
+
+
+This repository contains scripts to do the following:
+	i.	obtain data from collectd csv files
+	ii.	obtain data from ActiveState Stackato via stackato
+		command line.
+	iii.	write above data into BUS files (BUS Format),
+		a format that is required for presenting
+		in (HP) vPV tree-maps.
+
+                     DEPENDENCIES
+                     ------------
+
+The scripts rely on the following settings and perl modules:
+	i.	csv plugin is enabled in collectd.conf file
+	ii.	perl modules Text::CSV and Text::CSV_XS
+		modules are installed
+	iii.	stackato command-line is installed
+
+                       TESTING
+                       -------
+
+The scripts have been tested to work with ActiveState Stackato
+micro-cloud version 2.4.3.
+
+                       RUNNING
+                       -------
+
+Run the script 'createbusfiles' (shell script).
