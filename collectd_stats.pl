@@ -1,6 +1,7 @@
 #!/bin/perl
 
 use POSIX;
+use Getopt::Std;
 
 use Data::Dumper;
 use Text::CSV_XS;
@@ -192,6 +193,9 @@ sub writeToFlatFileBusfmt {
 }
 
 
+
+my %options = (); # hash to store command-line options
+
 $domain = "";
 $date_start = "";
 $date_end = "";
@@ -207,8 +211,19 @@ $collectd_secs = 10;
 @metrics = ("load/load", "cpu-0/cpu-idle", "memory/memory-used", "memory/memory-free");
 
 setDomain ("CONTROLLER");
-setcsvHome("/var/lib/collectd/csv");
-setInterval("2m");
+
+getopts("i:c:", \%options);
+if (defined $options{i}) {
+	setInterval($options{i});
+} else {
+	setInterval("1m");
+}
+
+if (defined $options{c}) {
+	setcsvHome($options{c});
+} else {
+	setcsvHome("/var/lib/collectd/csv");
+}
 
 @allhosts = getHosts;
 foreach (@allhosts) {
