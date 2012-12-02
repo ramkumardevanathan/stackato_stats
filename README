@@ -15,8 +15,11 @@ This repository contains scripts to do the following:
 
 The scripts rely on the following settings and perl modules:
 	i.	csv plugin is enabled in collectd.conf file
-	ii.	perl modules Text::CSV and Text::CSV_XS
-		modules are installed
+	ii.	perl modules Text::CSV and Text::CSV_XS modules are installed
+		# TEXT::CSV module
+		 [[ http://search.cpan.org/CPAN/authors/id/M/MA/MAKAMAKA/Text-CSV-1.21.tar.gz ]]
+		# TEXT::CSV_XS module
+		 [[ http://search.cpan.org/CPAN/authors/id/H/HM/HMBRAND/Text-CSV_XS-0.93.tgz ]]
 	iii.	stackato command-line is installed
 
                        TESTING
