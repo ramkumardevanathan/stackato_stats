@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# This script obtains data from
+#	a. collectd csv files
+#	b. stackato CLI
+
+# the data obtained, is written in <vpv> bus format
+# all .bus files are finally zipped up
+
+# (Perl) DEPENDENCIES:
+# TEXT::CSV module [[ http://search.cpan.org/CPAN/authors/id/M/MA/MAKAMAKA/Text-CSV-1.21.tar.gz ]]
+# TEXT::CSV_XS module [[ http://search.cpan.org/CPAN/authors/id/H/HM/HMBRAND/Text-CSV_XS-0.93.tgz ]]
+
+# TBD:
+# 1. error handling
+# 2. such data is sent to vPV over the wire using cURL utility
+
+export PATH=$PATH:.
+
+# create collectd bus files
+# default interval = 1 minute
+# default csv folders = /var/lib/collectd
+# change above settings with
+# 	-i <interval>m	<<don't forget m at the end>>
+#	-c </path/to/csv/files> options
+
+perl collectd_stats.pl -i 1m -c /var/lib/collectd/csv
+
+# create stackato user stats bus files
+# writes 1 unit of data collected, into bus format files
+
+sh stackato_user_stats.sh
+
+# create stackato app stats bus files
+# writes 1 unit of data collected, into bus format files
+
+perl stackato_app_stats.pl
+
+# zip up all bus files
+datestr=$(date "+%Y%m%d%H%M%S")
+
+zip busfiles-$datestr.zip *.bus
+if [ -s busfiles.zip ]; then
+		rm -f *.bus
+fi
+
