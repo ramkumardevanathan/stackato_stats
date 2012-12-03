@@ -13,6 +13,7 @@ This repository contains scripts to do the following:
 
 The scripts rely on the following settings and perl modules:
 	i.	csv plugin is enabled in collectd.conf file
+		read "editing collectd.conf" section below.
 	ii.	perl modules JSON, Text::CSV and Text::CSV_XS modules are installed
 		# JSON module
 		 [[ wget http://search.cpan.org/CPAN/authors/id/M/MA/MAKAMAKA/JSON-2.53.tar.gz ]]
@@ -31,3 +32,20 @@ The scripts have been tested to work with ActiveState Stackato micro-cloud versi
                        -------
 
 Run the script 'createbusfiles' (shell script).
+
+
+                  EDITING collectd.conf
+                  ---------------------
+
+To enable collectd.conf, follow the steps below.
+
+	i.	Uncomment the following line
+		  # LoadPlugin csv
+	ii.	Uncomment the details for csv plugin settings
+		  # <Plugin csv>
+		  # DataDir "/var/lib/collectd/csv"
+		  # StoreRates false
+		  # </Plugin>
+		NOTE: Ensure that the StoreRates setting is 'true'.
+		This ensures that collectd writes cpu utilization rates, instead
+		of 'raw' cumulative values.
