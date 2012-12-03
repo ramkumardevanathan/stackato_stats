@@ -93,7 +93,7 @@ sub fetchfromCSV {
 			die "Cannot use CSV: ".Text::CSV->error_diag ();
 	   my $linect = 1;
 
-	   open (my $fh, "<", $_) or die "Unable to open $_: $!";
+	   open (my $fh, "<", $_) or warn "Unable to open $_: $!";
 	   while (my $row = $csv->getline ($fh)) {
 	    if ($linect == 1) {
 		$linect++;
