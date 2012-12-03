@@ -40,7 +40,7 @@ perl stackato_app_stats.pl
 datestr=$(date "+%Y%m%d%H%M%S")
 
 zip busfiles-$datestr.zip *.bus
-if [ -s busfiles.zip ]; then
+if [ -s busfiles-$datestr.zip ]; then
 		rm -f *.bus
 fi
 
