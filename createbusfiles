@@ -7,13 +7,8 @@
 # the data obtained, is written in <vpv> bus format
 # all .bus files are finally zipped up
 
-# (Perl) DEPENDENCIES:
-# TEXT::CSV module [[ http://search.cpan.org/CPAN/authors/id/M/MA/MAKAMAKA/Text-CSV-1.21.tar.gz ]]
-# TEXT::CSV_XS module [[ http://search.cpan.org/CPAN/authors/id/H/HM/HMBRAND/Text-CSV_XS-0.93.tgz ]]
-
 # TBD:
 # 1. error handling
-# 2. such data is sent to vPV over the wire using cURL utility
 
 OLDPWD=.
 cd ~/stackato_stats
@@ -57,8 +52,9 @@ fi
 busfile=busfiles-$datestr.zip
 zip $busfile *.bus
 if [ -s $busfile ]; then
-# 	rm -f *.bus
-	:
+	mkdir -p bus
+	cp -f *.bus bus/
+ 	rm -f *.bus
 else
 	echo "Busfile not create/zero size"
 	cd $OLDPWD
@@ -71,6 +67,8 @@ curl "http://15.185.229.116:8081/PV/?UPDATESERVICE&ACTION=UPDATECOLLSTATUS&DATAS
 curl -v -L "http://15.185.229.116:8081/PV/?UPDATESERVICE&ACTION=UPDATECOLLSTATUS&DATASOURCE=STACKATO&DSUSERNAME=administrator&DOMAINID=Stackato&COLL_STATUS=2&CUSTOMER=DATACOLLECTORUSER"
 curl -v -L -F file=$busfile "http://15.185.229.116:8081/PV/?UPDATESERVICE&ACTION=UPLOADDATAFILES&DATASOURCE=STACKATO&DSUSERNAME=administrator&DOMAINID=Stackato&COLL_STATUS=2&CUSTOMER=DATACOLLECTORUSER"
 curl -v -L "http://15.185.229.116:8081/PV/?UPDATESERVICE&ACTION=UPDATECOLLSTATUS&DATASOURCE=STACKATO&DSUSERNAME=administrator&DOMAINID=Stackato&COLL_STATUS=4&CUSTOMER=DATACOLLECTORUSER"
+
+rm -f busfiles-$datestr.zip
 
 cd $OLDPWD
 exit 0
