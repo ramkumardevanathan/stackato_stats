@@ -17,6 +17,15 @@
 
 export PATH=$PATH:.
 
+# check if somebody is logged into stackato
+# if not, bail out
+
+whome=$(perl test_stackato.pl)
+if [ $whome = "N/A" ]; then
+	echo "Unable to proceed. Login to stackato required."
+	exit 1
+fi
+
 # create collectd bus files
 # default interval = 1 minute
 # default csv folders = /var/lib/collectd
