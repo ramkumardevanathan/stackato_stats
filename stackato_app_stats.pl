@@ -6,9 +6,9 @@ use Data::Dumper;
 use fns;
 
 my $users = fns::decode("stackato users --json");
+my $epoch = fns::time_msecs;
 
 foreach my $userhash (@$users) {
-	my $epoch = fns::time_msecs;
 	my $useremail = $userhash->{'email'};
 	my $appsarray = $userhash->{'apps'};
 

@@ -7,11 +7,11 @@ use fns;
 
 my $appstats = fns::decode("./jsonfix.sh $ARGV[0]");
 my $username = fns::chklogin;
+my $epoch = fns::time_msecs;
 
 print "EPOCH\tinstance\tstate\tcores\tdisk_quota\tfds_quota\tmem_quota\tuptime\tcpu_usage\tdisk_usage\tmem_usage\turis\n";
 
 foreach my $apphash (@$appstats) {
-        my $epoch = fns::time_msecs;
 	my $sref = $apphash->{"stats"};
 	my $uref = $sref->{"usage"};
 	my $instance = $sref->{"name"}.

@@ -33,6 +33,11 @@ fi
 
 perl collectd_stats.pl -i 1m -c /var/lib/collectd/csv
 
+# login as ramd@hp.com
+
+stackato target https://api.stackato-gkg8.local
+stackato login --email ramd@hp.com --passwd 1iso*help
+
 # create stackato user stats bus files
 # writes 1 unit of data collected, into bus format files
 

@@ -29,7 +29,9 @@ sub decode {
 }
 
 sub time_msecs {
-        my $epoch = time; $epoch = $epoch."000"; # msecs adjustment required for java code to handle datetime
+        my $epoch = time;
+	$epoch = $epoch - ($epoch % 10); # round off to previous 10s interval
+	$epoch = $epoch."000"; # msecs adjustment required for java code to handle datetime
 	return $epoch;
 }
 
