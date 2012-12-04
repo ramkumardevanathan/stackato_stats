@@ -6,6 +6,7 @@ use Data::Dumper;
 use fns;
 
 my $appstats = fns::decode("./jsonfix.sh $ARGV[0]");
+my $username = fns::chklogin;
 
 print "EPOCH\tinstance\tstate\tcores\tdisk_quota\tfds_quota\tmem_quota\tuptime\tcpu_usage\tdisk_usage\tmem_usage\turis\n";
 
@@ -16,7 +17,7 @@ foreach my $apphash (@$appstats) {
 	my $instance = $sref->{"name"}.
 			"-". $apphash->{"instance"}; # get env-0
 	print $epoch."\t".
-		$instance."\t".
+		$username.".".$instance."\t".
 		$apphash->{'state'}."\t".
 		$sref->{"cores"}."\t".
 		$sref->{"disk_quota"}."\t".

@@ -26,7 +26,7 @@ foreach my $userhash (@$users) {
 		  }
 		  my @parts = split (/\t/, $line);
 		  my $busfilename = 
-			"APP_INSTANCE\$!".$useremail.".".$parts[1].".bus";
+			"APP_INSTANCE\$!".$parts[1].".bus";
 		  open (BUS,">".$busfilename)
 			or die ("Unable to open file for writing");
 		  print (BUS $firstline);

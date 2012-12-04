@@ -50,12 +50,15 @@ perl stackato_app_stats.pl
 
 # zip up all bus files
 datestr=$(date "+%Y%m%d%H%M%S")
-cp -f METADATA.bus.template METADATA.bus
+if [ -f  METADATA.bus.template ]; then
+	cp -f METADATA.bus.template METADATA.bus
+fi
 
 busfile=busfiles-$datestr.zip
 zip $busfile *.bus
 if [ -s $busfile ]; then
-		rm -f *.bus
+# 	rm -f *.bus
+	:
 else
 	echo "Busfile not create/zero size"
 	cd $OLDPWD
