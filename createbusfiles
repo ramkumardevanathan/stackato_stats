@@ -15,6 +15,8 @@
 # 1. error handling
 # 2. such data is sent to vPV over the wire using cURL utility
 
+OLDPWD=.
+cd ~/stackato_stats
 export PATH=$PATH:.
 
 # check if somebody is logged into stackato
@@ -23,6 +25,7 @@ export PATH=$PATH:.
 whome=$(perl test_stackato.pl)
 if [ $whome = "N/A" ]; then
 	echo "Unable to proceed. Login to stackato required."
+	cd $OLDPWD
 	exit 1
 fi
 
@@ -49,8 +52,22 @@ perl stackato_app_stats.pl
 datestr=$(date "+%Y%m%d%H%M%S")
 cp -f METADATA.bus.template METADATA.bus
 
-zip busfiles-$datestr.zip *.bus
-if [ -s busfiles-$datestr.zip ]; then
+busfile=busfiles-$datestr.zip
+zip $busfile *.bus
+if [ -s $busfile ]; then
 		rm -f *.bus
+else
+	echo "Busfile not create/zero size"
+	cd $OLDPWD
+	exit 1
 fi
 
+busfile='@'$PWD/$busfile
+
+curl "http://15.185.229.116:8081/PV/?UPDATESERVICE&ACTION=UPDATECOLLSTATUS&DATASOURCE=STACKATO&DSUSERNAME=administrator&DOMAINID=Stackato&COLL_STATUS=1&CUSTOMER=DATACOLLECTORUSER"
+curl -v -L "http://15.185.229.116:8081/PV/?UPDATESERVICE&ACTION=UPDATECOLLSTATUS&DATASOURCE=STACKATO&DSUSERNAME=administrator&DOMAINID=Stackato&COLL_STATUS=2&CUSTOMER=DATACOLLECTORUSER"
+curl -v -L -F file=$busfile "http://15.185.229.116:8081/PV/?UPDATESERVICE&ACTION=UPLOADDATAFILES&DATASOURCE=STACKATO&DSUSERNAME=administrator&DOMAINID=Stackato&COLL_STATUS=2&CUSTOMER=DATACOLLECTORUSER"
+curl -v -L "http://15.185.229.116:8081/PV/?UPDATESERVICE&ACTION=UPDATECOLLSTATUS&DATASOURCE=STACKATO&DSUSERNAME=administrator&DOMAINID=Stackato&COLL_STATUS=4&CUSTOMER=DATACOLLECTORUSER"
+
+cd $OLDPWD
+exit 0
