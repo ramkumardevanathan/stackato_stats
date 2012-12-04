@@ -47,6 +47,7 @@ perl stackato_app_stats.pl
 
 # zip up all bus files
 datestr=$(date "+%Y%m%d%H%M%S")
+cp -f METADATA.bus.template METADATA.bus
 
 zip busfiles-$datestr.zip *.bus
 if [ -s busfiles-$datestr.zip ]; then

@@ -1,0 +1,13 @@
+InstanceName	InstanceType	HostName	powerstate
+ramd@hp.com.env-0	APP_INSTANCE	env-0 (ramd)	ON
+ramd@hp.com.scaling-demo-0	APP_INSTANCE	scaling-demo-0 (ramd)	ON
+ramd@hp.com.scaling-demo-1	APP_INSTANCE	scaling-demo-1 (ramd)	ON
+ramd@hp.com.scaling-demo-2	APP_INSTANCE	scaling-demo-2 (ramd)	ON
+ramd@hp.com.joomla-0	APP_INSTANCE	joomla-0 (ramd)	ON
+server-1347957050-az-3-region-a-geo-1.novalocal	CONTROLLER	server-1347957050-az-3-region-a-geo-1.novalocal	ON
+stackato	CONTROLLER	stackato	ON
+ramd@hp.com	USER	ramd@hp.com (admin)	ON
+thiyagu@hp.com	USER	thiyagu@hp.com (admin)	ON
+u1@hp.com	USER	u1@hp.com	ON
+u2@hp.com	USER	u2@hp.com	ON
+

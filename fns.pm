@@ -11,6 +11,10 @@ use Config;
 $VERSION     = 0.01;
 @ISA         = qw(Exporter);
 
+# sub json_pp {
+	# my $json_slurp_str = shift;
+	# open (J2P, "
+
 
 sub decode {
         local $/; #enable slurp mode
