@@ -12,7 +12,7 @@
 
 OLDPWD=.
 cd ~/stackato_stats
-export PATH=$PATH:.
+export PATH=$PATH:/home/stackato/bin:.
 
 # check if somebody is logged into stackato
 # if not, bail out

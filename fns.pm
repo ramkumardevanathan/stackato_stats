@@ -15,6 +15,15 @@ $VERSION     = 0.01;
 	# my $json_slurp_str = shift;
 	# open (J2P, "
 
+sub roundn10 {
+        my $n = shift;
+
+        if (($n % 10) ge 5) {
+                return $n + 10 - ($n % 10);
+        } else {
+                return $n - ($n % 10);
+        }
+}
 
 sub decode {
         local $/; #enable slurp mode
@@ -30,7 +39,7 @@ sub decode {
 
 sub time_msecs {
         my $epoch = time;
-	$epoch = $epoch - ($epoch % 10); # round off to previous 10s interval
+	$epoch = roundn10 ($epoch);
 	$epoch = $epoch."000"; # msecs adjustment required for java code to handle datetime
 	return $epoch;
 }
