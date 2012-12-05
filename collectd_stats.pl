@@ -138,13 +138,14 @@ sub writeToFlatFileBusfmt {
 
 	# Write in the headings/metric names first
 	my $epoch_printed = 0;
-	foreach my $metric (@metrics) {
+	my @localmetrics = @metrics; # save local copy
+	foreach my $metric (@localmetrics) {
 
 	 my $harray = $hash_ref->{$metric}->{'headings'};
 	 $metric_count += scalar (@$harray);
 
-	 my ($obj,$mshort) = split (/\//,$metric);
-	 $mshort =~ tr/-/_/;
+	 $metric =~ tr/-\//__/;
+
 	 if ($epoch_printed == 0) {
 		$harray->[0] = qw/EPOCH/ if ($harray->[0] == qw/epoch/);
 		$epoch_printed++;
@@ -152,13 +153,16 @@ sub writeToFlatFileBusfmt {
 		# remove 'epoch' metric from array
 		# always first element in array
 		shift(@$harray) if (lc($harray->[0]) == qw/epoch/);
-		$harray->[0] = $mshort."_".$harray->[0];
+		$harray->[0] = $metric."_".$harray->[0];
 	 }
 
 	 if (scalar(@$harray) > 1) {
-	  print BUS join("\t".$mshort."_", @$harray), "\t";
+	  print BUS join("\t".$metric."_", @$harray), "\t";
 	 } else {
 	  print BUS $harray->[0], "\t";
+	 }
+	 if ($metric =~ /cpu_([0-9]+)_cpu_idle/) {
+		print BUS "cpu_$1_usage_pct", "\t";
 	 }
 	} # foreach my $metric
 
@@ -173,6 +177,10 @@ sub writeToFlatFileBusfmt {
 	  if (!scalar keys %hostdata) { %hostdata = %$metric_values; }
 	  else {
 	    foreach my $key ( keys %$metric_values ) {
+		if ($metric =~ /cpu_([0-9]+)_cpu_idle/) {
+			my @cpu_values = @{ $metric_values->{$key} };
+			push @{ $metric_values->{$key} }, 100 - $cpu_values[0];
+		}
 		if (exists $hostdata{ $key }) {
 			my $temp = delete $hostdata{$key};
 			push @{ $hostdata{$key} }, @$temp, @{ $metric_values->{$key} };
