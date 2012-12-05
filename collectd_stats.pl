@@ -177,7 +177,7 @@ sub writeToFlatFileBusfmt {
 	  if (!scalar keys %hostdata) { %hostdata = %$metric_values; }
 	  else {
 	    foreach my $key ( keys %$metric_values ) {
-		if ($metric =~ /cpu_([0-9]+)_cpu_idle/) {
+		if ($metric =~ /cpu.([0-9]+).cpu.idle/) {
 			my @cpu_values = @{ $metric_values->{$key} };
 			push @{ $metric_values->{$key} }, 100 - $cpu_values[0];
 		}
@@ -216,7 +216,7 @@ $interval = "";
 
 $collectd_secs = 10;
 
-@metrics = ("load/load", "cpu-0/cpu-idle", "memory/memory-used", "memory/memory-free");
+@metrics = ("load/load", "cpu-0/cpu-idle", "cpu-1/cpu-idle", "memory/memory-used", "memory/memory-free");
 
 setDomain ("CONTROLLER");
 
