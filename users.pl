@@ -8,7 +8,7 @@ use fns;
 my $users = fns::decode("stackato users --json");
 my $epoch = fns::time_msecs;
 
-print "EPOCH\tuserid\tadmin_role\tapp_count\tallocated_mem_mb\tused_mem_mb\tgroups\n";
+print "EPOCH\tinstance\tadmin_role\tapp_count\tallocated_mem_mb\tused_mem_mb\tgroups\n";
 
 foreach my $userhash (@$users) {
 	my $useremail = $userhash->{'email'};
@@ -22,11 +22,11 @@ foreach my $userhash (@$users) {
 	my $mem_info_hash = fns::decode("stackato usage $useremail --json");
 	my $allocated_mb = $mem_info_hash->{'allocated'}->{'mem'}/1024;
 	my $usage_mb = $mem_info_hash->{'usage'}->{'mem'}/1024;
-	if ($admin_role eq "true") {
-		$useremail = "admin.".$useremail;
-	} elsif ($admin_role eq "false") {
-                $useremail = "user.".$useremail;
-        }
+	#if ($admin_role eq "true") {
+		#$useremail = "admin.".$useremail;
+	#} elsif ($admin_role eq "false") {
+                #$useremail = "user.".$useremail;
+        #}
 
 	if ($ARGV[0] eq "--users") {
 		print $epoch."\t".$useremail.

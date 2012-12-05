@@ -14,6 +14,12 @@ $VERSION     = 0.01;
 # sub json_pp {
 	# my $json_slurp_str = shift;
 	# open (J2P, "
+%secret = (
+		qw/ramd@hp.com/ => qw/1iso*help/,
+		qw/thiyagu@hp.com/ => qw/1thiyagu/,
+		qw/u1@hp.com/ => qw/u12345/,
+		qw/u2@hp.com/ => qw/u23456/
+	);
 
 sub roundn10 {
         my $n = shift;
@@ -58,7 +64,7 @@ sub chklogin {
 
 sub login {
         my $useremail = shift;
-        my $password  = shift;
+        my $password  = $secret{$useremail};
         my $group = shift;
 
         if (chklogin eq $useremail) { return 0; }

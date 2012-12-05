@@ -17,7 +17,7 @@ foreach my $apphash (@$appstats) {
 	my $instance = $sref->{"name"}.
 			"-". $apphash->{"instance"}; # get env-0
 	print $epoch."\t".
-		$username.".".$instance."\t".
+		$username.'~'.$instance."\t".
 		$apphash->{'state'}."\t".
 		$sref->{"cores"}."\t".
 		$sref->{"disk_quota"}."\t".
