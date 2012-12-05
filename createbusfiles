@@ -10,6 +10,14 @@
 # TBD:
 # 1. error handling
 
+if [ -z $1 || -z $2 ]; then
+	echo "Error! Usage $0 <time> <vpv-server>"
+	exit 1
+fi
+
+tp=$1
+vpv=$2
+
 OLDPWD=.
 cd ~/stackato_stats
 export PATH=$PATH:/home/stackato/bin:.
@@ -31,7 +39,7 @@ fi
 # 	-i <interval>m	<<don't forget m at the end>>
 #	-c </path/to/csv/files> options
 
-perl collectd_stats.pl -i 1m -c /var/lib/collectd/csv
+perl collectd_stats.pl -i $tp -c /var/lib/collectd/csv
 
 # login as ramd@hp.com
 
@@ -68,10 +76,10 @@ fi
 
 busfile='@'$PWD/$busfile
 
-curl "http://15.185.229.116:8081/PV/?UPDATESERVICE&ACTION=UPDATECOLLSTATUS&DATASOURCE=STACKATO&DSUSERNAME=administrator&DOMAINID=Stackato&COLL_STATUS=1&CUSTOMER=DATACOLLECTORUSER"
-curl -v -L "http://15.185.229.116:8081/PV/?UPDATESERVICE&ACTION=UPDATECOLLSTATUS&DATASOURCE=STACKATO&DSUSERNAME=administrator&DOMAINID=Stackato&COLL_STATUS=2&CUSTOMER=DATACOLLECTORUSER"
-curl -v -L -F file=$busfile "http://15.185.229.116:8081/PV/?UPDATESERVICE&ACTION=UPLOADDATAFILES&DATASOURCE=STACKATO&DSUSERNAME=administrator&DOMAINID=Stackato&COLL_STATUS=2&CUSTOMER=DATACOLLECTORUSER"
-curl -v -L "http://15.185.229.116:8081/PV/?UPDATESERVICE&ACTION=UPDATECOLLSTATUS&DATASOURCE=STACKATO&DSUSERNAME=administrator&DOMAINID=Stackato&COLL_STATUS=4&CUSTOMER=DATACOLLECTORUSER"
+curl "http://$vpv:8081/PV/?UPDATESERVICE&ACTION=UPDATECOLLSTATUS&DATASOURCE=STACKATO&DSUSERNAME=administrator&DOMAINID=Stackato&COLL_STATUS=1&CUSTOMER=DATACOLLECTORUSER"
+curl -v -L "http://$vpv:8081/PV/?UPDATESERVICE&ACTION=UPDATECOLLSTATUS&DATASOURCE=STACKATO&DSUSERNAME=administrator&DOMAINID=Stackato&COLL_STATUS=2&CUSTOMER=DATACOLLECTORUSER"
+curl -v -L -F file=$busfile "http://$vpv:8081/PV/?UPDATESERVICE&ACTION=UPLOADDATAFILES&DATASOURCE=STACKATO&DSUSERNAME=administrator&DOMAINID=Stackato&COLL_STATUS=2&CUSTOMER=DATACOLLECTORUSER"
+curl -v -L "http://$vpv:8081/PV/?UPDATESERVICE&ACTION=UPDATECOLLSTATUS&DATASOURCE=STACKATO&DSUSERNAME=administrator&DOMAINID=Stackato&COLL_STATUS=4&CUSTOMER=DATACOLLECTORUSER"
 
 rm -f busfiles-$datestr.zip
 
