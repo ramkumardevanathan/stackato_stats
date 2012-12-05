@@ -27,7 +27,7 @@ sub roundn10 {
         # if (($n % 10) ge 5) {
                 # return $n + 10 - ($n % 10);
         # } else {
-                return $n - ($n % 30);
+                return $n - ($n % 60);
         # }
 }
 
