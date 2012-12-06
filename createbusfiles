@@ -58,18 +58,17 @@ perl stackato_app_stats.pl
 
 # create METADATA.bus
 
-echo "InstanceName\tInstanceType\tHostName\tpowerstate" > METADATA.bus
+echo -e "InstanceName\tInstanceType\tHostName\tpowerstate" > METADATA.bus
 for file in $(ls -1 *.bus | grep -v METADATA.bus)
 do
         cit=""
         for EACH in $(echo "$file" | grep -o -e "[^\$\!]*"); do
             [ -z $cit ] && cit=$EACH
-            # echo "Found: \"$EACH\"";
         done
         fullpath=$(echo $EACH| sed 's/.bus//')
         ciname=$(echo $fullpath | grep -o -e "[^~]*$")
 
-	echo "$fullpath\t$cit\t$ciname\tON" >> METADATA.bus
+	echo -e "$fullpath\t$cit\t$ciname\tON" >> METADATA.bus
 done
 
 # zip up all bus files
