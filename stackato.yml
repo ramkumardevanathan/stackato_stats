@@ -11,21 +11,13 @@ processes:
     web: ~
 
 env:
-  HOME: /home/stackato
   JAVA_HOME: /usr
   JRE_HOME: /usr
 
-services:
-  ${name}-db: postgresql
-
 requirements:
-  cpan:
+  ppm:
     - JSON-XS
     - Text::CSV_XS
-
-hooks:
-  post-staging:
-    - edit_collectd_conf.sh
 
 cron:
     - "*/5 * * * * ~/stackato_stats/createbusfiles 1m localhost"
