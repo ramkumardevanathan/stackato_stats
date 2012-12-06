@@ -1,7 +1,6 @@
                         README
                         ------
 
-
 This repository contains scripts to do the following:
 	i.	obtain data from collectd csv files
 	ii.	obtain data from ActiveState Stackato via stackato command line.
@@ -32,6 +31,14 @@ Testing with 2.6.6 currently.
 
 Run the script 'createbusfiles' (shell script).
 
+                     RUN AS REGULAR TASK
+                     -------------------
+
+To add the createbusfiles script as a cron job, add the following line to the crontab.
+
+*/5 * * * * ~/stackato_stats/createbusfiles <time>m <fqdn.of.vpv.server>
+
+The above task runs every 5 minutes. Need to test with smaller intervals.
 
                   EDITING collectd.conf
                   ---------------------
