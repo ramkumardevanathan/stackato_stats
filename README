@@ -26,6 +26,13 @@ The scripts rely on the following settings and perl modules:
 The scripts have been tested to work with ActiveState Stackato micro-cloud version 2.4.3.
 Testing with 2.6.6 currently.
 
+                        BUGS
+                        ----
+
+	i.	createbusfiles script will not run automatically on reboot - cron job fails to run.
+		Need to run 'stackato login', and provide a valid username and password, then run
+		the createbusfiles script.
+
                        RUNNING
                        -------
 
