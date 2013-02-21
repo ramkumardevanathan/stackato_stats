@@ -10,8 +10,8 @@
 # TBD:
 # 1. error handling
 
-if [ -z $1 -o -z $2 ]; then
-	echo "Error! Usage $0 <time> <vpv-server>"
+if [ -z $1 ]; then
+	echo "Error! Usage $0 <time> [<vpv-server>]"
 	exit 1
 fi
 
@@ -43,7 +43,7 @@ perl collectd_stats.pl -i $tp -c /var/lib/collectd/csv
 
 # login as ramd@hp.com
 
-stackato target https://api.stackato-gkg8.local
+stackato target https://api.$(hostname).local
 stackato login --email ramd@hp.com --passwd 1iso*help
 
 # create stackato user stats bus files
@@ -56,17 +56,28 @@ sh stackato_user_stats.sh
 
 perl stackato_app_stats.pl
 
+# create METADATA.bus
+
+echo -e "InstanceName\tInstanceType\tHostName\tpowerstate" > METADATA.bus
+for file in $(ls -1 *.bus | grep -v METADATA.bus)
+do
+        cit=""
+        for EACH in $(echo "$file" | grep -o -e "[^\$\!]*"); do
+            [ -z $cit ] && cit=$EACH
+        done
+        fullpath=$(echo $EACH| sed 's/.bus//')
+        ciname=$(echo $fullpath | grep -o -e "[^~]*$")
+
+	echo -e "$fullpath\t$cit\t$ciname\tON" >> METADATA.bus
+done
+
 # zip up all bus files
 datestr=$(date "+%Y%m%d%H%M%S")
-if [ -f  METADATA.bus.template ]; then
-	cp -f METADATA.bus.template METADATA.bus
-fi
-
 busfile=busfiles-$datestr.zip
 zip $busfile *.bus
 if [ -s $busfile ]; then
 	mkdir -p bus
-	cp -f *.bus bus/
+	cp -f *.bus bus/ # just for tracing - save last created set of bus files
  	rm -f *.bus
 else
 	echo "Busfile not create/zero size"
@@ -76,10 +87,12 @@ fi
 
 busfile='@'$PWD/$busfile
 
-curl "http://$vpv:8081/PV/?UPDATESERVICE&ACTION=UPDATECOLLSTATUS&DATASOURCE=STACKATO&DSUSERNAME=administrator&DOMAINID=Stackato&COLL_STATUS=1&CUSTOMER=DATACOLLECTORUSER"
-curl -v -L "http://$vpv:8081/PV/?UPDATESERVICE&ACTION=UPDATECOLLSTATUS&DATASOURCE=STACKATO&DSUSERNAME=administrator&DOMAINID=Stackato&COLL_STATUS=2&CUSTOMER=DATACOLLECTORUSER"
-curl -v -L -F file=$busfile "http://$vpv:8081/PV/?UPDATESERVICE&ACTION=UPLOADDATAFILES&DATASOURCE=STACKATO&DSUSERNAME=administrator&DOMAINID=Stackato&COLL_STATUS=2&CUSTOMER=DATACOLLECTORUSER"
-curl -v -L "http://$vpv:8081/PV/?UPDATESERVICE&ACTION=UPDATECOLLSTATUS&DATASOURCE=STACKATO&DSUSERNAME=administrator&DOMAINID=Stackato&COLL_STATUS=4&CUSTOMER=DATACOLLECTORUSER"
+if [ x$vpv != "x" ]; then
+	curl "http://$vpv:8081/PV/?UPDATESERVICE&ACTION=UPDATECOLLSTATUS&DATASOURCE=STACKATO&DSUSERNAME=administrator&DOMAINID=Stackato&COLL_STATUS=1&CUSTOMER=DATACOLLECTORUSER"
+	curl -v -L "http://$vpv:8081/PV/?UPDATESERVICE&ACTION=UPDATECOLLSTATUS&DATASOURCE=STACKATO&DSUSERNAME=administrator&DOMAINID=Stackato&COLL_STATUS=2&CUSTOMER=DATACOLLECTORUSER"
+	curl -v -L -F file=$busfile "http://$vpv:8081/PV/?UPDATESERVICE&ACTION=UPLOADDATAFILES&DATASOURCE=STACKATO&DSUSERNAME=administrator&DOMAINID=Stackato&COLL_STATUS=2&CUSTOMER=DATACOLLECTORUSER"
+	curl -v -L "http://$vpv:8081/PV/?UPDATESERVICE&ACTION=UPDATECOLLSTATUS&DATASOURCE=STACKATO&DSUSERNAME=administrator&DOMAINID=Stackato&COLL_STATUS=4&CUSTOMER=DATACOLLECTORUSER"
+fi
 
 rm -f busfiles-$datestr.zip
 

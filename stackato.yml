@@ -1,0 +1,23 @@
+name: stackato_stats
+framework:
+  type: perl
+
+instance: 1
+mem: 128M
+
+command: sleep 365d
+
+processes:
+    web: ~
+
+env:
+  JAVA_HOME: /usr
+  JRE_HOME: /usr
+
+requirements:
+  ppm:
+    - JSON-XS
+    - Text::CSV_XS
+
+cron:
+    - "*/5 * * * * ~/stackato_stats/createbusfiles 1m localhost"
