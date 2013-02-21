@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<DOMAIN_VIEWS xmlns="http://www.hp.com/ov/pm/integration">
+    <DOMAIN_VIEW Name="Stackato"
+        MetricAdapter="com.hp.pm.core.adapter.metric.SCVMMFlatFileDSAdapter" 
+        SecurityProvider="com.hp.pm.core.configuration.PMiAuthUtil"
+        DBEnabled="true">
+
+        <CI_VIEWS>
+            <CI_VIEW Name="ControllerNodes" CIType="CONTROLLER">
+                <METRICS>
+                    <METRIC Name="CPUPercent" ColorCaption="Usage %" SizeCaption="AvailCPUCores">
+                        <COLOR_CLASS>CONTROLLER</COLOR_CLASS>
+                        <COLOR_METRIC>(cpu_0_usage_pct+cpu_1_usage_pct)/2</COLOR_METRIC>
+                        <COLOR_METRIC_MAX_VAL>100</COLOR_METRIC_MAX_VAL>
+                        <SIZE_CLASS>CONTROLLER</SIZE_CLASS>
+                        <SIZE_METRIC>Processors</SIZE_METRIC>
+                    </METRIC>
+                    <METRIC Name="MemPercent" ColorCaption="Usage %" SizeCaption="TotalGBs">
+                        <COLOR_CLASS>CONTROLLER</COLOR_CLASS>
+                        <COLOR_METRIC>100*(memory_memory_used_value/1024)/MemoryKB</COLOR_METRIC>
+                        <COLOR_METRIC_MAX_VAL>100</COLOR_METRIC_MAX_VAL>
+                        <SIZE_CLASS>CONTROLLER</SIZE_CLASS>
+                        <SIZE_METRIC>MemoryKB/1048576</SIZE_METRIC>
+                    </METRIC>
+                    <METRIC Name="Load" ColorCaption="Short-Term Load" SizeCaption="AvailCPUCores">
+                        <COLOR_CLASS>CONTROLLER</COLOR_CLASS>
+                        <COLOR_METRIC>load_load_shortterm</COLOR_METRIC>
+                        <COLOR_METRIC_MAX_VAL>10</COLOR_METRIC_MAX_VAL>
+                        <SIZE_CLASS>CONTROLLER</SIZE_CLASS>
+                        <SIZE_METRIC>Processors</SIZE_METRIC>
+                    </METRIC>
+                </METRICS>
+            </CI_VIEW>
+            <CI_VIEW Name="Users" CIType="USER">
+                <METRICS>
+                    <METRIC Name="MemPercent" ColorCaption="Mem Usage %" SizeCaption="No. of Apps">
+                        <COLOR_CLASS>USER</COLOR_CLASS>
+                        <COLOR_METRIC>100*used_mem_mb/allocated_mem_mb</COLOR_METRIC>
+                        <COLOR_METRIC_MAX_VAL>100</COLOR_METRIC_MAX_VAL>
+                        <SIZE_CLASS>USER</SIZE_CLASS>
+                        <SIZE_METRIC>app_count</SIZE_METRIC>
+                    </METRIC>
+                </METRICS>
+            </CI_VIEW>
+            <CI_VIEW Name="Apps" CIType="APP_INSTANCE">
+		<CATEGORIES>
+		    <PARENT_CI_TYPE Name="users" CIType="USER" />
+		</CATEGORIES>
+                <METRICS>
+                    <METRIC Name="MemPercent" ColorCaption="Mem Usage %" SizeCaption="Mem Quota (MB)">
+                        <COLOR_CLASS>APP_INSTANCE</COLOR_CLASS>
+                        <COLOR_METRIC>100*mem_usage/mem_quota</COLOR_METRIC>
+                        <COLOR_METRIC_MAX_VAL>100</COLOR_METRIC_MAX_VAL>
+                        <SIZE_CLASS>APP_INSTANCE</SIZE_CLASS>
+                        <SIZE_METRIC>mem_quota/1048576</SIZE_METRIC>
+                    </METRIC>
+                    <METRIC Name="CpuPercent" ColorCaption="CPU Usage %" SizeCaption="No. of CPU cores">
+                        <COLOR_CLASS>APP_INSTANCE</COLOR_CLASS>
+                        <COLOR_METRIC>cpu_usage</COLOR_METRIC>
+                        <COLOR_METRIC_MAX_VAL>100</COLOR_METRIC_MAX_VAL>
+                        <SIZE_CLASS>APP_INSTANCE</SIZE_CLASS>
+                        <SIZE_METRIC>cores</SIZE_METRIC>
+                    </METRIC>
+                    <METRIC Name="DiskUsage" ColorCaption="Disk Usage %" SizeCaption="Disk Space (GB)">
+                        <COLOR_CLASS>APP_INSTANCE</COLOR_CLASS>
+                        <COLOR_METRIC>100*disk_usage/disk_quota</COLOR_METRIC>
+                        <COLOR_METRIC_MAX_VAL>100</COLOR_METRIC_MAX_VAL>
+                        <SIZE_CLASS>APP_INSTANCE</SIZE_CLASS>
+                        <SIZE_METRIC>disk_usage/1073741824</SIZE_METRIC>
+                    </METRIC>
+                </METRICS>
+            </CI_VIEW>
+        </CI_VIEWS>
+        <REPORT_METRICLISTS>
+            <REP_METRICLIST>
+                <TABLENAME>CONTROLLER</TABLENAME>
+                <CLASSNAME>CONTROLLER</CLASSNAME>
+                <REP_METRICS>
+                    <REP_METRIC><NAME>cpu_0_usage_pct</NAME><TYPE>3</TYPE><ISKEY>false</ISKEY></REP_METRIC>
+                    <REP_METRIC><NAME>cpu_1_usage_pct</NAME><TYPE>3</TYPE><ISKEY>false</ISKEY></REP_METRIC>
+                    <REP_METRIC><NAME>load_load_shortterm</NAME><TYPE>3</TYPE><ISKEY>false</ISKEY></REP_METRIC>
+                    <REP_METRIC><NAME>load_load_longterm</NAME><TYPE>3</TYPE><ISKEY>false</ISKEY></REP_METRIC>
+                    <REP_METRIC><NAME>load_load_midterm</NAME><TYPE>3</TYPE><ISKEY>false</ISKEY></REP_METRIC>
+                    <REP_METRIC><NAME>Processors</NAME><TYPE>3</TYPE><SUMM>3</SUMM><ISKEY>false</ISKEY></REP_METRIC>
+                    <REP_METRIC><NAME>memory_memory_used_value</NAME><TYPE>3</TYPE><SUMM>3</SUMM><ISKEY>false</ISKEY></REP_METRIC>
+                    <REP_METRIC><NAME>MemoryKB</NAME><TYPE>3</TYPE><SUMM>3</SUMM><ISKEY>false</ISKEY></REP_METRIC>
+                </REP_METRICS>
+            </REP_METRICLIST>      
+            <REP_METRICLIST>
+                <TABLENAME>USER</TABLENAME>
+                <CLASSNAME>USER</CLASSNAME>
+                <REP_METRICS>
+                    <REP_METRIC><NAME>app_count</NAME><TYPE>3</TYPE><ISKEY>false</ISKEY></REP_METRIC>
+                    <REP_METRIC><NAME>used_mem_mb</NAME><TYPE>3</TYPE><SUMM>3</SUMM><ISKEY>false</ISKEY></REP_METRIC>
+                    <REP_METRIC><NAME>allocated_mem_mb</NAME><TYPE>3</TYPE><SUMM>3</SUMM><ISKEY>false</ISKEY></REP_METRIC>
+                </REP_METRICS>
+            </REP_METRICLIST>      
+            <REP_METRICLIST>
+                <TABLENAME>APP_INSTANCE</TABLENAME>
+                <CLASSNAME>APP_INSTANCE</CLASSNAME>
+                <REP_METRICS>
+                    <REP_METRIC><NAME>mem_quota</NAME><TYPE>3</TYPE><ISKEY>false</ISKEY></REP_METRIC>
+                    <REP_METRIC><NAME>mem_usage</NAME><TYPE>3</TYPE><SUMM>3</SUMM><ISKEY>false</ISKEY></REP_METRIC>
+                    <REP_METRIC><NAME>disk_quota</NAME><TYPE>3</TYPE><ISKEY>false</ISKEY></REP_METRIC>
+                    <REP_METRIC><NAME>disk_usage</NAME><TYPE>3</TYPE><SUMM>3</SUMM><ISKEY>false</ISKEY></REP_METRIC>
+                    <REP_METRIC><NAME>cores</NAME><TYPE>3</TYPE><ISKEY>false</ISKEY></REP_METRIC>
+                    <REP_METRIC><NAME>cpu_usage</NAME><TYPE>3</TYPE><SUMM>3</SUMM><ISKEY>false</ISKEY></REP_METRIC>
+                </REP_METRICS>
+            </REP_METRICLIST>      
+        </REPORT_METRICLISTS>	  
+    </DOMAIN_VIEW>
+</DOMAIN_VIEWS>
+
